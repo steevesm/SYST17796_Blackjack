@@ -10,16 +10,34 @@ package ca.sheridancollege.project;
  * enough to be instantiated for any Card game. Students wishing to add to the code 
  * should remember to add themselves as a modifier.
  * @author dancye, 2018
+ * @modified by steeves, 2021
  */
 public abstract class Card 
 {
-    //default modifier for child classes
-    
-    /**
-     * Students should implement this method for their specific children classes 
-     * @return a String representation of a card. Could be an UNO card, a regular playing card etc.
-     */
-    
+    private Suit suit;
+    private Value value;
+
+    public Card(Value value, Suit suit){
+        this.value = value;
+        this.suit = suit;
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
+    public void setValue(Value value) {
+        this.value = value;
+    }
+   
     @Override
     public abstract String toString();
     
