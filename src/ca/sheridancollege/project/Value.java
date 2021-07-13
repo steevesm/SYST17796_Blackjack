@@ -10,7 +10,7 @@ package ca.sheridancollege.project;
  * @author steevesm, 2021
  */
 public enum Value {
-    TWO,
+    Two,
     THREE,
     FOUR,
     FIVE,
