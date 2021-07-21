@@ -11,6 +11,7 @@ import java.util.Scanner;
 /**
  *
  * @author Matt
+ * @modifier paulske
  */
 public class BlackJack extends Game {
     
@@ -62,10 +63,16 @@ public class BlackJack extends Game {
                 userChoice = in.nextInt();
 
                 if(userChoice == 1){
-                    //Hit logic here
+                    playerHand.addToHand();
+                    System.out.println("You are now showing " + playerHand.cards.toString());
+                    System.out.println("Your Score is currently: " + this.getPlayer().getCards().combinedValue(playerHand, true));
+                    if(this.getPlayer().getCards().combinedValue(playerHand, true) > 21){
+                        //Code for losing here
+                        System.out.println("You Lose");
+                    }
                     choiceValid = true;
                 } else if(userChoice == 2){
-                    //Stay logic here
+                    System.out.println("You are choosing to stay and your score is: " + this.getPlayer().getCards().combinedValue(playerHand, true));
                     choiceValid = true;
                 } else if (userChoice == 3){
                     //Double Down Logic Here
@@ -118,4 +125,3 @@ public class BlackJack extends Game {
         newGame.play();
     }
 }
-
