@@ -25,6 +25,12 @@ public class BlackJackHand extends GroupOfCards {
     public BlackJackHand(boolean isDealer) {
         this.getNewHand(isDealer);
     }
+    
+    //constructor used only when splitting pairs
+    public BlackJackHand(BlackJackCard card){
+        this.cards.add(card);
+        handSize = 1;
+    }
 
     public void getNewHand(boolean isDealer) {
         int suitLength = suits.length;
