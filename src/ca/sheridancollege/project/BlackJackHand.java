@@ -71,6 +71,7 @@ public class BlackJackHand extends GroupOfCards {
     }
 
     public int combinedValue(BlackJackHand hand, boolean aceIsOne) {
+        handSize = hand.cards.size();
         int[] numArray = new int[handSize];
         int sum = 0;
 

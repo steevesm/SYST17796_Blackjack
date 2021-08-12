@@ -88,7 +88,7 @@ public class BlackJack extends Game {
                 } else if (userChoice == 3) {
                     //Double Down Logic Here 
                     if (!isSplit) {
-                        if (playerHand.getSize() == 2) {
+                        if (playerHand.cards.size() == 2) {
                             playerHand.addToHand();
                             if (this.getPlayer().getBankRoll() - bet > 0) {
                                 this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() - bet);
@@ -98,6 +98,7 @@ public class BlackJack extends Game {
                                 System.out.println("Your Score is currently: " + this.getPlayer().getCards().combinedValue(playerHand, true));
                                 choiceValid = true;
                             } else {
+                                
                                 System.out.println("You don't have enough money to bet again");
                                 choiceValid = false;
                             }
@@ -130,15 +131,17 @@ public class BlackJack extends Game {
             in.nextLine(); //Throw away the \n not consumed by nextInt()
 
             //Dealer plays hand
-            int dealerTotal = 0;
+            
             boolean dealerBust = false;
             //here
             dealer.getCards().cards.get(1).setDown(false);
+            int dealerTotal = dealer.getCards().combinedValue(dealer.getCards(), true);
             System.out.println("The Dealer is showing " + dealer.getCards().cards.toString());
             while (dealer.getCards().combinedValue(dealer.getCards(), true) < 17 && dealer.getCards().combinedValue(dealer.getCards(), false) < 17) {
                 dealer.getCards().addToHand();
+                dealerTotal = dealer.getCards().combinedValue(dealer.getCards(), true);
                 System.out.println("The Dealer is now showing " + dealer.getCards().cards.toString());
-                System.out.println("The Dealer's score is " + dealer.getCards().combinedValue(dealer.getCards(), true));
+                System.out.println("The Dealer's score is " + dealerTotal);
             }
             if (dealer.getCards().combinedValue(dealer.getCards(), false) > 21 && dealer.getCards().combinedValue(dealer.getCards(), true) > 21) {
                 dealerBust = true;
@@ -206,6 +209,9 @@ public class BlackJack extends Game {
                 } else if (playerHandTotal == 21 || playerHandTotalAce == 21) {
                     System.out.println("Your total is 21 and you win 1.5x your bet");
                     this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() + bet * 1.5);
+                } else if(dealerTotal > 21){
+                    System.out.println("The dealer busted! You won!");
+                    this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() + 2 * bet);
                 } else if (playerHandTotal < dealerTotal) {
                     System.out.println("Your total is lower than the dealer's and you lose");
                 } else if (playerHandTotal == dealerTotal) {
