@@ -12,6 +12,7 @@ import java.util.Scanner;
  *
  * @author steevesm, 2021
  * @modifier paulske
+ * @modifier Gurjot
  */
 public class BlackJack extends Game {
 
@@ -19,11 +20,14 @@ public class BlackJack extends Game {
         super("Black Jack");
     }
 
+    //play method contains ll the logic for the main part of the game
     @Override
     public void play() {
 
+        //a BlackJackDealer object is created
+        //the player enters their name and their bankroll
         BlackJackDealer dealer = new BlackJackDealer();
-        System.out.println("Welcome to the SYST17796" + this.getGameName() + " table!");
+        System.out.println("Welcome to the SYST17796 " + this.getGameName() + " table!");
         Scanner in = new Scanner(System.in);
         System.out.print("Please enter your name to get started: ");
         String playerID = in.nextLine();
@@ -33,33 +37,42 @@ public class BlackJack extends Game {
         System.out.println();
         Double bet = 0.00;
 
+        //the BlackJackPlayer object is created
         this.setPlayer(new BlackJackPlayer(playerID, credits));
         BlackJackHand playerHand = this.getPlayer().getCards();
         playerHand.setSize(2);
 
+        //the following loop runs until the player indicates they no longer want to play
         boolean contPlaying = true;
         while (contPlaying) {
+            //The player places their bet
             System.out.println("You have " + this.getPlayer().getBankRoll() + "$ left.");
             System.out.println("How much would you like to bet?");
             bet = in.nextDouble();
             in.nextLine(); //Throw away the \n not consumed by nextDouble()
             this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() - bet);
 
+            //The player is shown which cards the dealer has and which cards they have
             System.out.println("The Dealer is showing " + dealer.getCards().cards.toString());
             System.out.println("You are showing " + playerHand.cards.toString());
             System.out.println("Your Score is currently: " + this.getPlayer().getCards().combinedValue(playerHand, true));
 
+            //choiceValid is used to indicate if the player's choice is a valid one
+            //isSplit is used to indicate if the player has split their deck
             boolean choiceValid = false;
             boolean isSplit = false;
             BlackJackHand splitHand1 = new BlackJackHand(playerHand.cards.get(0));
             BlackJackHand splitHand2 = new BlackJackHand(playerHand.cards.get(1));
             int userChoice;
+            //The following loop runs until the player's turn is done
             while (!choiceValid) {
+                //showOptions prints the various choices for the player's turn
                 showOptions();
                 userChoice = in.nextInt();
 
                 if (userChoice == 1) {
                     //Hit logic here
+                    //The following adds a card to each hand if the player's hand is split
                     if (isSplit) {
                         splitHand1.addToHand();
                         splitHand2.addToHand();
@@ -69,12 +82,17 @@ public class BlackJack extends Game {
                         System.out.println("Hand 2 contains " + splitHand2.cards.toString());
                         System.out.println("Your Score for hand 1 is currently: " + this.getPlayer().getCards().combinedValue(splitHand1, true));
                         System.out.println("Your Score for hand 2 is currently: " + this.getPlayer().getCards().combinedValue(splitHand2, true));
+                    //The following adds a card to the player's hand and ends their turn if their score exceeds 21
                     } else {
                         playerHand.addToHand();
                         System.out.println("You are now showing " + playerHand.cards.toString());
                         playerHand.setSize(playerHand.getSize() + 1);
                         System.out.println("Your Score is currently: " + this.getPlayer().getCards().combinedValue(playerHand, true));
+                        if (this.getPlayer().getCards().combinedValue(playerHand, true) > 21) {
+                            choiceValid = true;
+                        }
                     }
+                
                 } else if (userChoice == 2) {
                     //Stay logic here
                     if (isSplit) {
@@ -87,9 +105,12 @@ public class BlackJack extends Game {
 
                 } else if (userChoice == 3) {
                     //Double Down Logic Here 
+                    //They can only double down if their hand isn't split
                     if (!isSplit) {
+                        //if the player has only two cards they can double their bet and receive one last card
                         if (playerHand.cards.size() == 2) {
                             playerHand.addToHand();
+                            //The player needs to have enough money to double their bet
                             if (this.getPlayer().getBankRoll() - bet > 0) {
                                 this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() - bet);
                                 bet *= 2;
@@ -98,7 +119,6 @@ public class BlackJack extends Game {
                                 System.out.println("Your Score is currently: " + this.getPlayer().getCards().combinedValue(playerHand, true));
                                 choiceValid = true;
                             } else {
-                                
                                 System.out.println("You don't have enough money to bet again");
                                 choiceValid = false;
                             }
@@ -113,6 +133,7 @@ public class BlackJack extends Game {
 
                 } else if (userChoice == 4) {
                     //Split Pairs Logic Here
+                    //if the player has a hand of 2 cards with the same value, they can split their hand into 2 separate hands
                     if (playerHand.cards.get(0).getValue() == playerHand.cards.get(1).getValue() && playerHand.getSize() == 2) {
                         isSplit = true;
                         System.out.println("You are now showing two hands");
@@ -131,12 +152,12 @@ public class BlackJack extends Game {
             in.nextLine(); //Throw away the \n not consumed by nextInt()
 
             //Dealer plays hand
-            
             boolean dealerBust = false;
-            //here
+            //The dealer's second card is made visible
             dealer.getCards().cards.get(1).setDown(false);
             int dealerTotal = dealer.getCards().combinedValue(dealer.getCards(), true);
             System.out.println("The Dealer is showing " + dealer.getCards().cards.toString());
+            //The dealer picks up cards until their total is 17 or higher
             while (dealer.getCards().combinedValue(dealer.getCards(), true) < 17 && dealer.getCards().combinedValue(dealer.getCards(), false) < 17) {
                 dealer.getCards().addToHand();
                 dealerTotal = dealer.getCards().combinedValue(dealer.getCards(), true);
@@ -170,7 +191,7 @@ public class BlackJack extends Game {
             boolean splitBust1 = false;
             boolean splitBust2 = false;
             if (isSplit) {
-                
+
                 //The following if statements determine which splitHandTotal values to use
                 if (splitHandTotal1 > 21 && splitHandTotal1Ace > 21) {
                     splitBust1 = true;
@@ -186,7 +207,7 @@ public class BlackJack extends Game {
                 } else if (splitHandTotal2 < 21 && splitHandTotal2Ace < 21) {
                     finalSplitHand2 = splitHandTotal2Ace;
                 }
-                
+
                 //The following if statements determine whether the split hands win or lose
                 if (splitBust1 == true && splitBust2 == true) {
                     System.out.println("Both split hands are busts and you lose");
@@ -199,7 +220,7 @@ public class BlackJack extends Game {
                 } else if (finalSplitHand1 == dealerTotal || finalSplitHand2 == dealerTotal) {
                     System.out.println("Your total is tied with the dealer's and your bet is returned");
                     this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() + bet);
-                } else if (finalSplitHand1 < dealerTotal && finalSplitHand2 < dealerTotal){
+                } else if (finalSplitHand1 < dealerTotal && finalSplitHand2 < dealerTotal) {
                     System.out.println("Your total is lower than the dealer's and you lose");
                 }
             } else {
@@ -209,7 +230,7 @@ public class BlackJack extends Game {
                 } else if (playerHandTotal == 21 || playerHandTotalAce == 21) {
                     System.out.println("Your total is 21 and you win 1.5x your bet");
                     this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() + bet * 1.5);
-                } else if(dealerTotal > 21){
+                } else if (dealerTotal > 21) {
                     System.out.println("The dealer busted! You won!");
                     this.getPlayer().setBankRoll(this.getPlayer().getBankRoll() + 2 * bet);
                 } else if (playerHandTotal < dealerTotal) {
@@ -224,6 +245,7 @@ public class BlackJack extends Game {
             }
 
             //Post Hand Continue Playing Menu
+            //If the player chooses to play again, the main loop restarts
             boolean contValid = false;
             while (!contValid) {
                 System.out.println("Would you like to continue playing? (Y/N)");
@@ -245,6 +267,7 @@ public class BlackJack extends Game {
         }
     }
 
+    //method shows the options available to the player
     public static void showOptions() {
         System.out.println("What would you like to do?");
         System.out.println("1: Hit");
