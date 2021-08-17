@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author Matt
+ * @author steevesm, 2021
  * @modifier paulske
  */
 public class BlackJack extends Game {
