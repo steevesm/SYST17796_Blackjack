@@ -32,6 +32,7 @@ public class BlackJackHand extends GroupOfCards {
         handSize = 1;
     }
 
+    //Gets a new hand for either the user or the dealer
     public void getNewHand(boolean isDealer) {
         int suitLength = suits.length;
         int valueLength = values.length;
@@ -62,7 +63,8 @@ public class BlackJackHand extends GroupOfCards {
             }
         }
     }
-
+    
+    //Adds another card to the hand
     public void addToHand() {
         int randIndexValue = new Random().nextInt(values.length);
         int randIndexSuit = new Random().nextInt(suits.length);
@@ -70,6 +72,7 @@ public class BlackJackHand extends GroupOfCards {
         handSize++;
     }
 
+    //Aquires the total value of the hand depending on the value of the ace
     public int combinedValue(BlackJackHand hand, boolean aceIsOne) {
         handSize = hand.cards.size();
         int[] numArray = new int[handSize];

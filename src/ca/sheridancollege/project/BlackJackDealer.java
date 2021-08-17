@@ -18,11 +18,11 @@ public class BlackJackDealer extends Player{
         super("Dealer");
         cards = new BlackJackHand(true);      
     }
-
+    //Getter
     public BlackJackHand getCards() {
         return cards;
     }
-
+    //Setter
     public void setCards(BlackJackHand cards) {
         this.cards = cards;
     }

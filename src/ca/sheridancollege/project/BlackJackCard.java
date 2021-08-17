@@ -18,14 +18,16 @@ public class BlackJackCard extends Card {
         this.down = isFaceDown;
     }
     
+    //Getter
     public boolean isDown() {
         return down;
     }
-
+    //Setter
     public void setDown(boolean down) {
         this.down = down;
     }
     
+    //Prints card value and suit for user
     @Override
     public String toString(){
         if (!this.isDown()){

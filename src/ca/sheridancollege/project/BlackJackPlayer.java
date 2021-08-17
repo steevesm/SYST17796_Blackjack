@@ -19,19 +19,19 @@ public class BlackJackPlayer extends Player{
         bankRoll = totalCredits;
         cards = new BlackJackHand(false);      
     }
-
+    //Getter
     public BlackJackHand getCards() {
         return cards;
     }
-
+    //Setter
     public void setCards(BlackJackHand cards) {
         this.cards = cards;
     }
-    
+    //Setter
     public void setBankRoll(double credits){
         bankRoll = credits;
     }
-    
+    //Getter
     public double getBankRoll(){
         return this.bankRoll;
     }
